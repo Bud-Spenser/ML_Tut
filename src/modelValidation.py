@@ -34,3 +34,19 @@ melbourne_model.fit(train_X, train_y)
 # get predicted prices on validation data
 val_predictions = melbourne_model.predict(val_X)
 print(mean_absolute_error(val_y, val_predictions))
+
+#creating function get_mae
+#try to avoid over- and underfitting by changing the max_leaf_nodes and predict the MAE for each of those.
+
+def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
+    model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    model.fit(train_X, train_y)
+    preds_val = model.predict(val_X)
+    mae = mean_absolute_error(val_y, preds_val)
+    return(mae)
+
+for max_leaf_nodes in range(5, 5000, 100):
+    my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
+    print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+
+final_model = DecisionTreeRegressor(max_leaf_nodes=450)
